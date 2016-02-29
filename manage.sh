@@ -144,7 +144,7 @@ manage_playlists() {
 		fi
 		while true; do
 			echo "==================================================="
-			DATA=`echo "SELECT * FROM playlist WHERE rowid=$playlistid;" | eval $SQLITE`
+			DATA=`echo "SELECT filename, build, auto_create FROM playlist WHERE rowid=$playlistid;" | eval $SQLITE`
 			IFS=$'\t' read -ra PLAYLIST <<< "$DATA"
 			echo "1 (Name): ${PLAYLIST[0]}"
 			echo "2 (Build): ${PLAYLIST[1]}"
@@ -209,7 +209,7 @@ manage_songs() {
 		if [ "$songid" == "F" ] || [ "$songid" == "f" ]; then
 			read -p "Filter String: " filter
 			if [ "${#filter}" -gt 0 ]; then
-				WHERE="WHERE filename LIKE \"%$filter%\""
+				WHERE="WHERE filename LIKE \"%$filter%\" OR artist LIKE \"%$filter%\""
 			else
 				WHERE=""
 			fi
